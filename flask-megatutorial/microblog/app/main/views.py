@@ -1,28 +1,11 @@
-from flask import render_template, flash, redirect
-from flask_mail import Message
-from app import app, mail
+from flask import render_template, flash, redirect, current_app
+from . import main
+from .. import db
 from .forms import LoginForm
-from threading import Thread
+from ..emails import send_email
 
-def send_async_email(app, msg):
-	with app.app_context():
-		mail.send(msg)
-
-def send_email(to, subject, template, **kwargs):
-	"""
-	Send Asyncronous mail
-	"""
-	msg = Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX'] + subject,
-				sender=app.config['FLASKY_MAIL_SENDER'],
-				recipients=[to])
-	msg.body = render_template(app.config['FLASKY_MAIL_TEMPLATES_FOLDER'] +  '/' + template + '.txt', **kwargs)
-	msg.html = render_template(app.config['FLASKY_MAIL_TEMPLATES_FOLDER'] +  '/' + template + '.html', **kwargs) 	
-	thr = Thread(target=send_async_email, args=[app, msg])
-	thr.start()
-	return thr
-
-@app.route('/')
-@app.route('/index')
+@main.route('/')
+@main.route('/index')
 def index():
 	# fake user
 	user = {"nickname": "jean"}
@@ -42,11 +25,11 @@ def index():
 							user=user, 
 							posts=posts)
 
-@app.route('/tester')
+@main.route('/tester')
 def tester():
 	return "Tester Route"
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
 	form =  LoginForm()
 	# returns false for get request, returns true when all data is correct
@@ -57,7 +40,7 @@ def login():
 							title="Log In",
 							form=form)
 
-@app.route('/mail')
+@main.route('/mail')
 def send_mail():
 	send_email('juanpedrotramposo@gmail.com', 'Welcome', 'mail', user="jean")
 	send_email('juanpedrotramposo@gmail.com', 'Welcome', 'mail', user="jean")

@@ -1,10 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+#from flask.ext.bootstrap import Bootstrap
+from config import config
 
-app = Flask(__name__)
-app.config.from_object('config')
-db = SQLAlchemy(app)
-mail = Mail(app)
+db = SQLAlchemy()
+mail = Mail()
+#bootstrap = Bootstrap()
 
-from app import views, models
+def create_app(config_name):
+	""" Factory Function to create app"""
+	app = Flask(__name__)
+	app.config.from_object(config[config_name])
+	config[config_name].init_app(app)
+	db.init_app(app)
+	mail.init_app(app)
+
+	# main blueprint
+	from main import main as main_blueprint
+	app.register_blueprint(main_blueprint)
+
+	return app
