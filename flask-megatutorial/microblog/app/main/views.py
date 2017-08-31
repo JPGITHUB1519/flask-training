@@ -1,4 +1,5 @@
 from flask import render_template, flash, redirect, current_app
+from flask_login import login_required
 from . import main
 from .. import db
 from .forms import LoginForm
@@ -45,3 +46,9 @@ def send_mail():
 	send_email('juanpedrotramposo@gmail.com', 'Welcome', 'mail', user="jean")
 	send_email('juanpedrotramposo@gmail.com', 'Welcome', 'mail', user="jean")
 	return "hey"
+
+# protecting routes for authenticated users
+@main.route('/secret')
+@login_required
+def secret():
+	return 'Only authenticated users are allowed'
