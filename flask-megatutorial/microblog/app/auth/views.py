@@ -70,7 +70,7 @@ def confirm(token):
 def unconfirmed():
 	if current_user.is_anonymous or current_user.confirmed:
 		return redirect('main.index')
-	return render_template('auth/unconfirmed.html')
+	return render_template('auth/unconfirmed.html', user=current_user)
 
 @auth.route('/confirm')
 def resend_confirmation():

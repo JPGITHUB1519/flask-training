@@ -3,13 +3,15 @@
 {% block page_content %}
 	<div class="row">
 		<div class="col-xs-12">
-			<h1>You must confirm your email papush ;V
+			<h1>Hello, {{ user.nickname }}</h1>
+			<h2>You have not confirmed your account yet</h2>
+			<p>Before you can access this site you need to confirm your account. Check your inbox, you should have received  a email with a confirmation link </p>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-xs-12">
-			<a href="{{ url_for('auth.resend_confirmation') }}" class="text-center">Resend Confirmation Email</a>
+			<p>Need another confirmation email?, <a href="{{ url_for('auth.resend_confirmation') }}" class="text-center">Resend Confirmation Email</a></p>
 		</div>
 	</div>
 {% endblock %}
