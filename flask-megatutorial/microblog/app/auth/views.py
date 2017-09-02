@@ -1,4 +1,3 @@
-from __future__ import print_function # for printing in console 
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
@@ -6,6 +5,7 @@ from ..models import User
 from .forms import LoginForm, RegistrationForm
 from .. import db
 from ..emails import send_email
+from ..debugging import printd
 
 
 # handling unconfirmed users
@@ -48,6 +48,8 @@ def register():
 		token = user.generate_confirmation_token()
 		send_email(user.email, 'Confirm your account', '/auth/email/confirm', user=user, token=token)
 		flash('A confirmation email has been sent to you by email')
+		# login user after register
+		login_user(user)
 		return redirect(url_for('main.index'))
 
 	return render_template('auth/register.html', form=form)
@@ -67,6 +69,5 @@ def confirm(token):
 @auth.route('/unconfirmed')
 def unconfirmed():
 	if current_user.is_anonymous or current_user.confirmed:
-		print ("hey", file=sys.stderr)
 		return redirect('main.index')
 	return render_template('auth/unconfirmed.html')
