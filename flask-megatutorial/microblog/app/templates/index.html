@@ -1,7 +1,14 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-	<h1>Hi, {{ user.nickname }}</h1>
+	<!-- <h1>Hi, {{ user.nickname }}</h1> -->
+	<h1>Hi, 
+	{% if current_user.is_authenticated %}
+		{{ current_user.nickname }}
+	{% else %}
+		Stranger
+	{% endif %}
+	</h1>
 	{% for post in posts %}
 		<div>
 			<p>{{ post.author.nickname }} says: <b>{{ post.body }}</b></p>
