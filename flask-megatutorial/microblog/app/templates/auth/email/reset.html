@@ -1,10 +1,8 @@
 <h1>Dear {{ user.nickname }}<h1>
 
-Welcome to Flasky!
+<p>To reset your password account please click on the following link: </p>
 
-<p>To confirm your account please click on the following link: </p>
-
-<p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
+<p>{{ url_for('auth.reset_password', token=token, email=user.email, _external=True) }}</p>
 
 <p>Sincerely</p>
 

@@ -30,18 +30,7 @@ def index():
 @main.route('/tester')
 def tester():
 	return "Tester Route"
-
-@main.route('/login', methods=['GET', 'POST'])
-def login():
-	form =  LoginForm()
-	# returns false for get request, returns true when all data is correct
-	if form.validate_on_submit():
-		flash('Login Requested for username=%s' % (form.username.data))
-		return redirect('/index')
-	return render_template('login.html',
-							title="Log In",
-							form=form)
-
+	
 @main.route('/mail')
 def send_mail():
 	send_email('juanpedrotramposo@gmail.com', 'Welcome', 'mail', user="jean")

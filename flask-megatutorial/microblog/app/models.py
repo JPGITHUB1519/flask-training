@@ -49,7 +49,32 @@ class User(UserMixin, db.Model):
         self.confirmed = True
         db.session.add(self)
         db.session.commit()
-        return True 
+        return True
+
+    def reset_password(self, token):
+        data = self.check_token(token)
+        if data:
+            print "password reseted"
+            return True
+
+        return False
+
+
+
+    # token generation methods
+    def generate_token(self, token_type, expiration=3600):
+        """ Generate a new encrypted confirmation token"""
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({token_type : self.id})
+
+    def check_token(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except Exception as e:
+            return False
+        return data
+
 
 
 class Post(db.Model):

@@ -37,3 +37,16 @@ class UpdatePasswordForm(Form):
 	def validate_old_password(self, field):
 		if not current_user.verify_password(field.data):
 			raise ValidationError('The Old Password you entered is not correct')
+
+class ResetPasswordRequestForm(Form):
+	email = StringField('Email', validators=[Required(), Length(1, 120), Email()])
+	submit = SubmitField('Send')
+
+	# we must not validate email here to avoid brute force attacks
+	# def validate_email(self, field):
+	# 	if not User.query.filter_by(email=field.data).first():
+	# 		raise ValidationError('This email does not exists')
+
+class ResetPasswordForm(Form):
+	new_password = PasswordField('New password', validators=[Required()])
+	submit = SubmitField('Save')

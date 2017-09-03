@@ -1,4 +1,4 @@
-Dear {{ user.username }}
+Dear {{ user.nickname }}
 
 Welcome to Flasky!
 
