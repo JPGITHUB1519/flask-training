@@ -1,4 +1,5 @@
 from flask_wtf import Form
+from flask_login import current_user
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import Required, Email, Length, Regexp, EqualTo
 from wtforms import ValidationError
@@ -27,3 +28,12 @@ class RegistrationForm(Form):
 	def validate_nickname(self, field):
 		if User.query.filter_by(nickname=field.data).first():
 			raise ValidationError('Username already in use')
+
+class UpdatePasswordForm(Form):
+	old_password = PasswordField('Old Password', validators=[Required()])
+	new_password = PasswordField('New password', validators=[Required()])
+	submit = SubmitField('Save')
+
+	def validate_old_password(self, field):
+		if not current_user.verify_password(field.data):
+			raise ValidationError('The Old Password you entered is not correct')

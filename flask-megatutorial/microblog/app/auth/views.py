@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from ..models import User
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, UpdatePasswordForm
 from .. import db
 from ..emails import send_email
 from ..debugging import printd
@@ -76,5 +76,17 @@ def unconfirmed():
 def resend_confirmation():
 	token =  current_user.generate_confirmation_token()
 	send_email(current_user.email, 'Confirm your account', 'auth/email/confirm', user=current_user, token=token)
-	flash('A new confirmation email has been sent to you by email')
-	return redirect(url_for('main.index'))
+	flash('A new confirmation email has been sent to you by email', "success")
+	return redirect(url_for('main.index')),
+
+@auth.route('/update-password', methods=['GET', 'POST'])
+def update_password():
+	form = UpdatePasswordForm()
+	if form.validate_on_submit():
+		current_user.password = form.new_password.data
+		db.session.add(current_user)
+		db.session.commit()
+		flash('Your Password was updated correctly', "success")
+		return redirect(url_for('main.index'))
+
+	return render_template('/auth/update_password.html', form=form)

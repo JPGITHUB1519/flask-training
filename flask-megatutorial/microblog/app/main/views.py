@@ -1,9 +1,10 @@
 from flask import render_template, flash, redirect, current_app
-from flask_login import login_required
+from flask_login import login_required, current_user
 from . import main
 from .. import db
 from .forms import LoginForm
 from ..emails import send_email
+from ..debugging import printd
 
 @main.route('/')
 @main.route('/index')

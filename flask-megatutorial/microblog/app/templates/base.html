@@ -7,7 +7,6 @@
 	{% else %}
 		<title>Welcome to the Microblog</title>
 	{% endif %}
-	<!-- <link rel="stylesheet" type="text/css" href=""> -->
 {% endblock %}
 
 
@@ -23,9 +22,15 @@
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 		{% if current_user.is_authenticated %}
-			<li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"> </span> Account <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="{{ url_for('auth.update_password') }}"><span class="glyphicon glyphicon-edit"> Update-Password</a></li>
+					<li><a href="{{ url_for('auth.logout') }}"><span class="glyphicon glyphicon-log-out"> Logout</a></li>
+				</ul>
+			</li>
 		{% else %}
-			<li><a href="{{ url_for('auth.login') }}">Login</a></li>
+			<li></span><a href="{{ url_for('auth.login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 		{% endif %}
 		</ul>
 	  </div>
@@ -34,16 +39,18 @@
 
 {% block content %}
 	<div class="container">
-		{% block page_content %}{% endblock %}
-		<hr>
-		{% with messages = get_flashed_messages() %}
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		  	<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
 			{% if messages %}
-				<ul>
-					{% for message in messages %}
-						<li>{{ message }}</li>
-					{% endfor %}
-				</ul>
+				{% for category, message in messages %}
+					<div class="alert alert-{{ category }} alert-dismissable" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						{{ message }}
+					</div>
+				{% endfor %}
 			{% endif %}
 		{% endwith %}
+		{% block page_content %}{% endblock %}
+		<hr>
 	</div>
 {% endblock %}
