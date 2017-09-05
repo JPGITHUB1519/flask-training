@@ -17,6 +17,9 @@ class Config:
 	FLASKY_MAIL_TEMPLATES_FOLDER = '/mail'
 	FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
 
+	# disable notifications sqlalchemy
+	SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 	@staticmethod
 	def init_app(app):
 		pass

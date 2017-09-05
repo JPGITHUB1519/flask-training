@@ -36,6 +36,7 @@ class User(UserMixin, db.Model):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm' : self.id})
 
+    # todo - refactor this using dinamically token generations
     def confirm(self, token):
         """ Confirm user token to activate user"""
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -51,23 +52,32 @@ class User(UserMixin, db.Model):
         db.session.commit()
         return True
 
-    def reset_password(self, token):
+    def check_reset_password_token(self, token):
+        """ Checks if a valid reset token """
         data = self.check_token(token)
-        if data:
-            print "password reseted"
-            return True
-
-        return False
-
-
+        if data.get('reset') != self.id:
+            return False
+        return True
 
     # token generation methods
     def generate_token(self, token_type, expiration=3600):
-        """ Generate a new encrypted confirmation token"""
+        """ Refactor - Generate a new encrypted confirmation token
+        
+        Returns:
+            @string - Returns the generated token
+        """
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({token_type : self.id})
 
     def check_token(self, token):
+        """ Check if X token is valid. 
+        
+        Returns:
+            if the token is valid:
+                @dict - data of the token
+            else:
+                @boolean - false 
+        """
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)

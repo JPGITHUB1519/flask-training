@@ -106,7 +106,7 @@ def reset_password_request():
 def reset_password(token):
 	user = User.query.filter_by(email=request.args.get('email')).first()
 	if user:
-		if user.reset_password(token):
+		if user.check_reset_password_token(token):
 			form = ResetPasswordForm()
 			if form.validate_on_submit():
 				user.password = form.new_password.data
