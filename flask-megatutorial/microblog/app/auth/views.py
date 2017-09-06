@@ -60,9 +60,9 @@ def confirm(token):
 	if current_user.confirmed:
 		return redirect(url_for('main.index'))
 	if current_user.confirm(token):
-		flash('You have confirmed your account, Thanks!')
+		flash('You have confirmed your account, Thanks!', 'success')
 	else:
-		flash('The confirmation link in invalid or has expired')
+		flash('The confirmation link in invalid or has expired', 'danger')
 
 	return redirect(url_for('main.index'))
 

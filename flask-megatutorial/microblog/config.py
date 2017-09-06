@@ -15,7 +15,7 @@ class Config:
 	FLASKY_MAIL_SUBJECT_PREFIX = '[FLASKY]'
 	FLASKY_MAIL_SENDER = 'Flask Admin <juanpedrotramposo@gmail.com>'
 	FLASKY_MAIL_TEMPLATES_FOLDER = '/mail'
-	FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+	FLASKY_ADMIN = 'juanpedro1519@gmail.com' or os.environ.get('FLASKY_ADMIN')
 
 	# disable notifications sqlalchemy
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
